@@ -10,3 +10,5 @@
 
 # Utility Commands
 \! cls
+mysqldump -u root -p --databases <tabel_name_in_plural> > <date_dbname.sql>
+mysqldump -u root -p --databases library_db > C:\xampp\htdocs\it30b\backups\0818206_library_db.sql
