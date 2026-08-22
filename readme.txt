@@ -5,6 +5,8 @@
 5. INSERT INTO <table_name_in_plural>
     (columns) VALUES
     (values);
+6.  ALTER TABLE <tabel_name_in_plural>
+    -> ADD student_created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP;
 
 
 
