@@ -2,14 +2,14 @@ CREATE TABLE students (
     student_id INT AUTO_INCREMENT PRIMARY KEY,
     student_first_name VARCHAR(50) NOT NULL,
     student_last_name VARCHAR(50) NOT NULL,
-    student_course VARCHAR(50) NOT NULL,
+    student_course VARCHAR(50) NOT NULL
 );
 
 CREATE TABLE books(
     book_id INT AUTO_INCREMENT PRIMARY KEY,
     book_title VARCHAR(100) NOT NULL,
     book_author VARCHAR(100) NOT NULL,
-    book_category VARCHAR(50) NOT NULL,
+    book_category VARCHAR(50) NOT NULL
     book_created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP);
 
  CREATE TABLE borrow(
@@ -18,7 +18,7 @@ CREATE TABLE books(
     book_id INT NOT NULL,
     borrow_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     borrow_return_date TIMESTAMP NULL DEFAULT NULL,
-    CONSTRAINT fk_borrow_student FOREIGN KEY (student_id) REFERENCES students(student_id),
+    CONSTRAINT fk_borrow_student FOREIGN KEY (student_id) REFERENCES students(student_id)
     CONSTRAINT fk_borrow_book FOREIGN KEY (book_id) REFERENCES books(book_id));
 
 
@@ -44,7 +44,7 @@ WHERE borrow_return_date = '2026-08-25 08:26:27';
 UPDATE borrow
 SET borrow_return_date = CURRENT_TIMESTAMP
 --Change value of borrow_id to the ID of the book being returned
-WHERE borrow_id = 1; AND borrow_return_date IS NULL;
+WHERE borrow_id = 1 AND borrow_return_date IS NULL;
 
 SELECT br.borrow_id, s.student_id,
     Concat(s.student_first_name, ' ', s.student_last_name) AS student_name, s.student_course,

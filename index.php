@@ -17,13 +17,56 @@ $options = [
 
 try{
    $pdo = new PDO($dsn, $user, $pass, $options); 
-   echo "connection successful";
+//    echo "connection successful";
 }catch(PDOException $e){
     die("Database connection failed: " . $e->getMessage());
 }
 
-?>
+//Session
+session_start();
 
+//Determine current section
+$SECTION = $_GET['section'] ?? 'students';
+
+//Determine CRUD Operation
+$ACTION = $_GET['action'] ?? '';
+
+//Fetch students
+if($SECTION === 'students'){
+    $stmt = $pdo->query("SELECT * FROM students ORDER BY students_id DESC");    
+    $students = $stmt->fetchAll();
+}
+
+// Create Student
+if($SECTION==='students' && $ACTION==='create'){
+    if($_SERVER['REQUEST_METHOD']==='POST'){
+        $firstName = trim($_POST['student_first_name'] ?? '');
+        $lastName= trim($_POST['student_last_name'] ?? '');
+        $course = trim($_POST['student_course'] ?? '');
+
+        if($firstName !== '' && $lastName !== '' && $course !== ''){
+            $sql = "
+                INSERT INTO students(
+                    student_first_name,
+                    student_last_name,
+                    student_course
+                )VALUES (?,?,?)";
+
+            $stmt=$pdo->prepare($sql);
+
+            $stmt->execute([
+                $firstName,
+                $lastName,
+                $course
+            ]);
+
+            header("Location: index.php?section=students");
+            exit;
+        }
+    }
+}
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -32,6 +75,117 @@ try{
     <title>Library System</title>
 </head>
 <body>
-    
+    <h1>Simple Library System</h1>
+    <nav>
+        <a href="index.php?section=students">Students</a> |
+        <a href="index.php?section=books">Books</a> |
+        <a href="index.php?section=borrow">Borrow</a>
+    </nav>
+    <hr>
+    <!--Student Section-->
+    <?php if ($SECTION === 'students') : ?>
+    <h1>Students</h1>
+
+
+    <p>
+        <a href="index.php?section=students&action=create"> 
+        Add Student
+        </a>
+    </P>
+
+    <?php if($ACTION==='create'): ?>
+        <h2>Create Student</h2>
+
+        <form method="POST">
+            <p>
+                <label>First Name</label>
+                <br>
+                <input type="text"
+                   name="student_first_name"
+                   required
+                />
+            </p>
+            <p>
+                <label>Last Name</label>
+                <br>
+                <input type="text"
+                   name="student_last_name"
+                   required
+                />
+            </p>
+            <p>
+                <label>Course</label>
+                <br>
+                <input type="text"
+                   name="student_course"
+                   required
+                />
+            </p>
+
+            <button type="Submit">
+                Save
+            </button>
+
+            <a href="index.php?section=students">
+                Cancel
+        </a>
+
+
+        </form>
+    <?php else: ?>
+                
+        <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Course</th>
+                <th>Created at</th>
+                <th>Actions</th>
+            </tr>
+            <tbody>
+                <?php foreach($students as $student) : ?>
+                    <tr>
+                        <td>
+                            <?= htmlspecialchars($student['students_id']) ?>
+                        </td>
+                        <td>
+                            <?= htmlspecialchars($student['student_first_name']) ?>
+                        </td>
+                        <td>
+                            <?= htmlspecialchars($student['student_last_name']) ?>
+                        </td>
+                        <td>
+                            <?= htmlspecialchars($student['student_course']) ?>
+                        </td>
+                        <td>
+                            <?= htmlspecialchars($student['student_created_at']) ?>
+                        </td>
+                        <td>
+                            <a>Edit</a> 
+                            <a >Delete</a>
+                        </td>
+                    </tr>
+                <?php endforeach; ?>
+            </tbody>
+    </table>
+
+    <?php endif; ?>
+
+
+    <?php endif; ?>
+
+     <!--Books Section-->
+    <?php if ($SECTION === 'books') : ?>
+    <h1>Books</h1>
+    <?php endif; ?>
+
+     <!--Borrow Section-->
+    <?php if ($SECTION === 'borrow') : ?>
+    <h1>Borrow</h1>
+    <?php endif; ?>
+
+
 </body>
 </html>
