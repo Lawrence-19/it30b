@@ -209,26 +209,29 @@ if ($SECTION === 'books' && $ACTION === 'update') {
 
 //Retrieve Borrowed Books
 if ($SECTION === 'borrow') {
+    
     //Retrieve students
     $stmt = $pdo->prepare("
         SELECT
             student_first_name,
             student_last_name
         FROM students
-        Oder BY student_last_name, student_first_name
-    ");
-
-    //Retrieve books
-        $stmt = $pdo->prepare("
-        SELECT
-            book_id,
-            book_title,
-            book_author,
-        FROM books
-        Oder BY book_title
+        ORDER BY student_last_name, student_first_name
     ");
 
     $students = $stmt->fetchall();
+
+    //Retrieve books
+    $stmt = $pdo->prepare("
+        SELECT
+            book_id,
+            book_title,
+            book_author
+        FROM books
+        ORDER BY book_title
+    ");
+
+    $books = $stmt->fetchall();
 }
 
 //CREATE BORROW
