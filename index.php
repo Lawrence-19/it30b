@@ -400,6 +400,24 @@ if ($SECTION === 'borrow') {
     $borrows = $stmt->fetchAll();
 }
 
+ //retuen a book
+if($SECTION == "borrow" && $ACTION == "return") {
+    $borrowId = (int) ($_GET['id'] ?? 0);
+
+        $stmt = $pdo->prepare("
+            UPDATE borrow
+            SET borrow_return_date = CURRENT_TIMESTAMP
+            WHERE borrow_id = ?
+        ");
+
+        $stmt->execute([$borrowId]);
+
+        $_SESSION['alert'] = "Book returned successfully!";
+    
+         header("Location: index.php?section=borrow");
+    exit;
+}
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -702,7 +720,7 @@ if ($SECTION === 'borrow') {
                 </select>
 
                 <br></br>
-                
+
                 <button type="submit">Borrow</button>
                     </button>
                         
@@ -735,7 +753,7 @@ if ($SECTION === 'borrow') {
                             <td><?=htmlspecialchars($br['borrow_return_date'] ?? 'Not returned') ?></td>
                             <td><?=htmlspecialchars($br['borrow_status'] ?? ' Borrowed ') ?></td>
                             <td>
-                                <a href="#">Return</a> 
+                                <a href="index.php?section=borrow&action=return&id=<?= $br['borrow_id'] ?>">Return</a> 
                             </td>                            
                         </tr>
                     <?php endforeach; ?>
