@@ -26,10 +26,11 @@ INNER JOIN books b
 
 WHERE br.borrow_return_date IS NULL
 
-ORDER BY br.borrow_date ASC;
+ORDER BY br.borrow_date DESC;
 
 -- Return a book
 UPDATE borrow
 SET borrow_return_date = CURRENT_TIMESTAMP
 WHERE borrow_id = 2
     AND borrow_return_date IS NULL;
+`
