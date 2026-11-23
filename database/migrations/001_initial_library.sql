@@ -1,26 +1,26 @@
 -- #1 students table
-CREATE TABLE IF NOT EXIST students (
+CREATE TABLE IF NOT EXISTS students (
     -- Primary key for the student table
     students_id INT AUTO_INCREMENT PRIMARY KEY,
 
     -- student name
     student_first_name VARCHAR(50) NOT NULL,
-    student_last_name VARCHAR(50 NOT NULL),
+    student_last_name VARCHAR(50) NOT NULL,
 
     -- student course
     student_course VARCHAR(50) NOT NULL,
 
     -- student created at timestamp
-    student_created_at TIMESTAMP NOT NULL 
+    student_created_at TIMESTAMP NOT NULL,
     DEFAULT CURRENT_TIMESTAMP
     
-) ENGINE=InnoDB;
+) ENGINE=InnoDB
 DEFAULT CHARSET = utf8mb4
 COLLATE= utf8mb4_general_ci;
 
 
 -- #2 books table
-CREATE TABLE IF NOT EXIST books (
+CREATE TABLE IF NOT EXISTS books (
     -- Primary key for the books tbale
     book_id INT PRIMARY KEY AUTO_INCREMENT,
 
@@ -39,7 +39,7 @@ COLLATE= utf8mb4_general_ci;
 
 -- #3 borrow table
 
-CREATE TABLE IF NOT EXIST borrow (
+CREATE TABLE IF NOT EXISTS borrow (
     -- Primary key for the borrow table
     borrow_id INT AUTO_INCREMENT PRIMARY KEY,
 
